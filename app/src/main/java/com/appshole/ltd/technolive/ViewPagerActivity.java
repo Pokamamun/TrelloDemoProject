@@ -36,7 +36,17 @@ public class ViewPagerActivity extends AppCompatActivity implements View.OnClick
     private ShadowTransformer mCardShadowTransformer;
     private FragmentPagerAdapter mFragmentPagerAdapter;
     private ShadowTransformer mFragmentCardShadowTransformer;
+    FragmentPagerAdapter.onSelectedFragmentPagerListener m_FragmentPagerListener = new FragmentPagerAdapter.onSelectedFragmentPagerListener() {
+        @Override
+        public void onClick(int type) {
+            getBoardListFromServer();
+        }
+    };
     private boolean mShowingFragments = false;
+
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +66,6 @@ public class ViewPagerActivity extends AppCompatActivity implements View.OnClick
 
 
     }
-
-
-    FragmentPagerAdapter.onSelectedFragmentPagerListener m_FragmentPagerListener = new FragmentPagerAdapter.onSelectedFragmentPagerListener() {
-        @Override
-        public void onClick(int type) {
-            getBoardListFromServer();
-        }
-    };
 
     private void getBoardListFromServer() {
 
@@ -182,7 +184,7 @@ public class ViewPagerActivity extends AppCompatActivity implements View.OnClick
             mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentPagerAdapter);
             mViewPager.setAdapter(mFragmentPagerAdapter);
             mViewPager.setPageTransformer(false, mCardShadowTransformer);
-            mViewPager.setOffscreenPageLimit(3);
+            mViewPager.setOffscreenPageLimit(4);
 
             hud.dismiss();
 
@@ -298,10 +300,6 @@ public class ViewPagerActivity extends AppCompatActivity implements View.OnClick
         }
 
         mShowingFragments = !mShowingFragments;
-    }
-
-    public static float dpToPixels(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().density);
     }
 
     @Override

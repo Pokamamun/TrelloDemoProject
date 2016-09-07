@@ -1,18 +1,15 @@
 package com.appshole.ltd.technolive;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,29 +28,41 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 
 
 public class MainActivity extends AppCompatActivity {
 
 
+    public static Board globalBoard;
+    public static ArrayList<BoardList> globalBoardlist;
     private KProgressHUD hud;
     private ListView boardListview;
     private ListViewMyBoardAdapter listViewMyBoardAdapter;
-    public static Board globalBoard;
-    public static ArrayList<BoardList> globalBoardlist;
-
     private ArrayList<Board> boardarraylist;
     private Board selectedBoard;
+    ListViewMyBoardAdapter.onSelectedBoardListener m_listnerOFBoard = new ListViewMyBoardAdapter.onSelectedBoardListener() {
+        @Override
+        public void onClick(int type, Board myboard) {
+
+
+            if (type == 1) {
+                globalBoard = myboard;
+                Intent i = new Intent(MainActivity.this, ViewPagerActivity.class);
+                startActivity(i);
+
+            } else if (type == 2) {
+
+                selectedBoard = myboard;
+                deleteDialog();
+            }
+
+
+        }
+    };
     private String boardName = "";
-
-
     private String accountToken = "521c79beb07d996b8ed363f147c63e101804d17d29752fb75d96842b90b24b33";
     private String Developerkey = "39615017597892d384d576145f2003c1";
     private String secretKey = "5fc3cf8f1a2e63f28fb3d3a32241754d299eb84913d42bff59341b5ba72181e8";
@@ -81,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -103,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void showEditextDialog() {
 
@@ -286,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                                 boardArrayList.remove(i);
                             }
                         }
+
                         boardarraylist = boardArrayList;
                         fillAdapter(boardArrayList);
                     }
@@ -336,27 +344,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-    ListViewMyBoardAdapter.onSelectedBoardListener m_listnerOFBoard = new ListViewMyBoardAdapter.onSelectedBoardListener() {
-        @Override
-        public void onClick(int type, Board myboard) {
-
-
-            if (type == 1) {
-                globalBoard = myboard;
-                Intent i = new Intent(MainActivity.this, ViewPagerActivity.class);
-                startActivity(i);
-
-            } else if (type == 2) {
-
-                selectedBoard = myboard;
-                deleteDialog();
-            }
-
-
-        }
-    };
-
 
     public void deleteDialog() {
 
